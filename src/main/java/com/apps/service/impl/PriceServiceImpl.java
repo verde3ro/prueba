@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Service
 @Slf4j
@@ -30,8 +29,8 @@ public class PriceServiceImpl implements IPriceService {
 	public ProductPriceResponse applyPrice(ProductPriceRequest productPriceRequest) {
 		try {
 			DateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-			Date applyDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim());
-			Date onlyDate = formatter.parse(formatter.format(applyDate));
+			var applyDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim());
+			var onlyDate = formatter.parse(formatter.format(applyDate));
 
 			return priceRepository
 					.applyPrice(applyDate, productPriceRequest.getProductId(), productPriceRequest.getBrandId(), onlyDate)
