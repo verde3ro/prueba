@@ -10,8 +10,10 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 @Slf4j
@@ -27,8 +29,12 @@ public class PriceServiceImpl implements IPriceService {
 	@Override
 	public ProductPriceResponse applyPrice(ProductPriceRequest productPriceRequest) {
 		try {
+			DateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+			Date applyDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim());
+			Date onlyDate = formatter.parse(formatter.format(applyDate));
+
 			return priceRepository
-					.applyPrice((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim()), productPriceRequest.getProductId(), productPriceRequest.getBrandId())
+					.applyPrice(applyDate, productPriceRequest.getProductId(), productPriceRequest.getBrandId(), onlyDate)
 					.orElse(null);
 		} catch (ParseException ex) {
 			log.error("Ocurrió un error al recuperar la fecha de aplicación..", ex);

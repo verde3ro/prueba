@@ -32,9 +32,10 @@ import java.util.Date;
 @Table(name = "PRICES")
 @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p")
 @NamedNativeQuery(name = "findPriceByStartDateAndProductIdAndBrandId",
-		query = "SELECT PRODUCT_ID, BRAND_ID, PRICE_LIST, START_DATE, END_DATE, PRICE FROM PRICES WHERE " +
+		query = "SELECT PRODUCT_ID, BRAND_ID, PRICE_LIST, TO_CHAR(START_DATE, 'DD/MM/YYYY HH24:MI:SS') START_DATE, TO_CHAR(END_DATE, 'DD/MM/YYYY HH24:MI:SS') END_DATE, PRICE FROM PRICES WHERE " +
 				"START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId " +
-				"AND PRIORITY = (SELECT MAX(PRIORITY) FROM PRICES WHERE START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId)",
+				"AND PRIORITY = (SELECT MAX(PRIORITY) FROM PRICES WHERE START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId AND CAST(START_DATE AS DATE) = :onlyDate) " +
+				"AND CAST(START_DATE AS DATE) = :onlyDate",
 		resultSetMapping = "ProductPriceResponse"
 )
 @SqlResultSetMapping(name = "ProductPriceResponse",
@@ -44,8 +45,8 @@ import java.util.Date;
 						@ColumnResult(name = "PRODUCT_ID", type = Integer.class),
 						@ColumnResult(name = "BRAND_ID", type = Integer.class),
 						@ColumnResult(name = "PRICE_LIST", type = Short.class),
-						@ColumnResult(name = "START_DATE", type = Date.class),
-						@ColumnResult(name = "END_DATE", type = Date.class),
+						@ColumnResult(name = "START_DATE", type = String.class),
+						@ColumnResult(name = "END_DATE", type = String.class),
 						@ColumnResult(name = "PRICE", type = BigDecimal.class)
 				})
 )

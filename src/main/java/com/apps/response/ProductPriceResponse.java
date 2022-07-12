@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -19,8 +18,8 @@ public class ProductPriceResponse implements Serializable {
 	private Integer productId;
 	private Integer brandId;
 	private Short priceList;
-	private Date endDate;
-	private Date startDate;
+	private String startDate;
+	private String endDate;
 	private BigDecimal price;
 
 }

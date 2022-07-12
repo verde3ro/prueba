@@ -35,39 +35,32 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail.price").isEqualTo(38.95D);
+				.jsonPath("$.detail.price").isEqualTo(25.45D);
 	}
 
 	@Test
 	@Order(2)
-	void testStatusOkDayOneHourTwo() throws Exception {
+	void testStatusNoContentDayOneHourTwo() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-14 16:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(objectMapper.writeValueAsString(productPriceRequest))
 				.exchange()
-				.expectStatus().isOk()
-				.expectHeader().contentType(MediaType.APPLICATION_JSON)
-				.expectBody()
-				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail.priceList").isEqualTo(4);
+				.expectStatus().isNoContent()
+				.expectHeader().exists("Date");
 	}
 
 	@Test
 	@Order(3)
-	void testStatusOkDayOneHourThree() throws Exception {
+	void testStatusNoContentDayOneHourThree() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-14 21:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(objectMapper.writeValueAsString(productPriceRequest))
 				.exchange()
-				.expectStatus().isOk()
-				.expectHeader().contentType(MediaType.APPLICATION_JSON)
-				.expectBody()
-				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail.startDate").isEqualTo("2021-01-01T05:59:59.000+00:00");
+				.expectStatus().isNoContent();
 	}
 
 	@Test
@@ -83,12 +76,12 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail.endDate").isEqualTo("2020-06-15T21:00:00.000+00:00");
+				.jsonPath("$.detail.price").isEqualTo(38.95D);
 	}
 
 	@Test
 	@Order(5)
-	void testStatusNoContent() throws Exception {
+	void testStatusNoContentDayThree() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-16 21:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
