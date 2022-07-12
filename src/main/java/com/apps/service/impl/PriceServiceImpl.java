@@ -1,18 +1,20 @@
 package com.apps.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.apps.exception.InternalException;
 import com.apps.repository.IPriceRepository;
 import com.apps.request.ProductPriceRequest;
 import com.apps.response.ProductPriceResponse;
 import com.apps.service.IPriceService;
-import lombok.extern.slf4j.Slf4j;
+
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -28,7 +30,7 @@ public class PriceServiceImpl implements IPriceService {
 	@Override
 	public ProductPriceResponse applyPrice(ProductPriceRequest productPriceRequest) {
 		try {
-			DateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			var applyDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim());
 			var onlyDate = formatter.parse(formatter.format(applyDate));
 
