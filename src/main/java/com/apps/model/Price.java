@@ -1,17 +1,22 @@
 package com.apps.model;
 
+import com.apps.response.ProductPriceResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +31,24 @@ import java.util.Date;
 @Entity
 @Table(name = "PRICES")
 @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p")
+@NamedNativeQuery(name = "findPriceByStartDateAndProductIdAndBrandId",
+		query = "SELECT PRODUCT_ID, BRAND_ID, PRICE_LIST, START_DATE, END_DATE, PRICE FROM PRICES WHERE " +
+				"START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId " +
+				"AND PRIORITY = (SELECT MAX(PRIORITY) FROM PRICES WHERE START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId)",
+		resultSetMapping = "ProductPriceResponse"
+)
+@SqlResultSetMapping(name = "ProductPriceResponse",
+		classes = @ConstructorResult(
+				targetClass = ProductPriceResponse.class,
+				columns = {
+						@ColumnResult(name = "PRODUCT_ID", type = Integer.class),
+						@ColumnResult(name = "BRAND_ID", type = Integer.class),
+						@ColumnResult(name = "PRICE_LIST", type = Short.class),
+						@ColumnResult(name = "START_DATE", type = Date.class),
+						@ColumnResult(name = "END_DATE", type = Date.class),
+						@ColumnResult(name = "PRICE", type = BigDecimal.class)
+				})
+)
 public class Price implements Serializable {
 	private static final long serialVersionUID = 1L;
 

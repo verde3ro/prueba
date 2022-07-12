@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -25,7 +24,7 @@ class PruebaApplicationTests {
 
 	@Test
 	@Order(1)
-	void testUno() throws Exception {
+	void testStatusOkDayOneHourOne() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-14 10:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -36,12 +35,12 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail").value(hasSize(3));
+				.jsonPath("$.detail.price").isEqualTo(38.95D);
 	}
 
 	@Test
 	@Order(2)
-	void testDos() throws Exception {
+	void testStatusOkDayOneHourTwo() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-14 16:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -52,12 +51,12 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail").value(hasSize(2));
+				.jsonPath("$.detail.priceList").isEqualTo(4);
 	}
 
 	@Test
 	@Order(3)
-	void testTres() throws Exception {
+	void testStatusOkDayOneHourThree() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-14 21:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -68,12 +67,12 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail").value(hasSize(2));
+				.jsonPath("$.detail.startDate").isEqualTo("2021-01-01T05:59:59.000+00:00");
 	}
 
 	@Test
 	@Order(4)
-	void testTCuatro() throws Exception {
+	void testStatusOkDayTwo() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-15 10:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -84,12 +83,12 @@ class PruebaApplicationTests {
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.code").isEqualTo("success")
-				.jsonPath("$.detail").value(hasSize(1));
+				.jsonPath("$.detail.endDate").isEqualTo("2020-06-15T21:00:00.000+00:00");
 	}
 
 	@Test
 	@Order(5)
-	void testTCinco() throws Exception {
+	void testStatusNoContent() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-16 21:00:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -101,7 +100,7 @@ class PruebaApplicationTests {
 
 	@Test
 	@Order(6)
-	void testSeis() throws Exception {
+	void testStatusInternalError() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-16 21:00", 35455, 1);
 
 		webTestClient.post().uri("/api/price/applyPrice")
@@ -117,7 +116,7 @@ class PruebaApplicationTests {
 
 	@Test
 	@Order(7)
-	void testSiete() throws Exception {
+	void testStatusBadRequest() throws Exception {
 		ProductPriceRequest productPriceRequest = new ProductPriceRequest("2020-06-15 10:00:00", 0, -1);
 
 		webTestClient.post().uri("/api/price/applyPrice")

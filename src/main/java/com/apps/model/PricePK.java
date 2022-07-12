@@ -41,8 +41,8 @@ public class PricePK implements Serializable {
 	}
 
 	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
+		final var prime = 31;
+		var hash = 17;
 		hash = hash * prime + this.brandId;
 		hash = hash * prime + this.productId;
 		hash = hash * prime + ((int) this.priceList);

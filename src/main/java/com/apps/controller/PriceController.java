@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -44,9 +43,9 @@ public class PriceController {
 						.body(createMapResult("Validación de campo fallida", "validation_failed", errors));
 			}
 
-			List<ProductPriceResponse> productPrice = priceService.applyPrice(productPriceRequest);
+			ProductPriceResponse productPrice = priceService.applyPrice(productPriceRequest);
 
-			if (productPrice.isEmpty()) {
+			if (null == productPrice) {
 				return ResponseEntity
 						.noContent()
 						.build();
