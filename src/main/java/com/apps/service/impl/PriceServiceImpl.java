@@ -1,6 +1,5 @@
 package com.apps.service.impl;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -30,12 +29,10 @@ public class PriceServiceImpl implements IPriceService {
 	@Override
 	public ProductPriceResponse applyPrice(ProductPriceRequest productPriceRequest) {
 		try {
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			var applyDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(productPriceRequest.getApplyDate().trim());
-			var onlyDate = formatter.parse(formatter.format(applyDate));
 
 			return priceRepository
-					.applyPrice(applyDate, productPriceRequest.getProductId(), productPriceRequest.getBrandId(), onlyDate)
+					.applyPrice(applyDate, productPriceRequest.getProductId(), productPriceRequest.getBrandId())
 					.orElse(null);
 		} catch (ParseException ex) {
 			log.error("Ocurrió un error al recuperar la fecha de aplicación..", ex);

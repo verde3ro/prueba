@@ -33,9 +33,8 @@ import java.util.Date;
 @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p")
 @NamedNativeQuery(name = "findPriceByStartDateAndProductIdAndBrandId",
 		query = "SELECT PRODUCT_ID, BRAND_ID, PRICE_LIST, TO_CHAR(START_DATE, 'DD/MM/YYYY HH24:MI:SS') START_DATE, TO_CHAR(END_DATE, 'DD/MM/YYYY HH24:MI:SS') END_DATE, PRICE FROM PRICES WHERE " +
-				"START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId " +
-				"AND PRIORITY = (SELECT MAX(PRIORITY) FROM PRICES WHERE START_DATE >= :applyDate AND PRODUCT_ID = :productId AND BRAND_ID = :brandId AND CAST(START_DATE AS DATE) = :onlyDate) " +
-				"AND CAST(START_DATE AS DATE) = :onlyDate",
+				":applyDate BETWEEN START_DATE AND END_DATE AND PRODUCT_ID = :productId AND BRAND_ID = :brandId " +
+				"ORDER BY PRIORITY DESC LIMIT 1",
 		resultSetMapping = "ProductPriceResponse"
 )
 @SqlResultSetMapping(name = "ProductPriceResponse",

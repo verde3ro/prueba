@@ -14,6 +14,6 @@ public interface IPriceRepository extends JpaRepository<Price, PricePK> {
 
 	@Query(name = "findPriceByStartDateAndProductIdAndBrandId", nativeQuery = true)
 	Optional<ProductPriceResponse> applyPrice(@Param("applyDate") Date applyDate, @Param("productId") Integer productId,
-	                                          @Param("brandId") Integer brandId, @Param("onlyDate") Date onlyDate);
+	                                          @Param("brandId") Integer brandId);
 
 }
